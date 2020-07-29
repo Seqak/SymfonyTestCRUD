@@ -7,27 +7,41 @@
     <div class="container-fluid">
         <div class="col-md-12 row">
             <div class="col-md-6">
-                <div class="mt-5 mb-3"><h2>List of articles</h2></div>
-                <table class="table table-striped border-left border-right">
+
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+                <div class="mb-3"><h2>List of articles</h2></div>
+                <table class="table table-striped border-left border-right border-bottom">
                     <thead>
                     <tr class="font-weight-bold">
                         <td>ID</td>
                         <td>Title</td>
+                        <td>Author</td>
+                        <td>Date</td>
                         <td>Actions</td>
                     </tr>
                     </thead>
 
                     <tbody>
+                    {% for article in articles %}
                     <tr>
-                        <td>1</td>
-                        <td>New features in PHP!</td>
+                        <td> {{ article.id }} </td>
+                        <td> {{ article.title }} </td>
+                        <td> {{ article.author }} </td>
+                        <td> {{ article.insertdate }} </td>
                         <td>
-                            <a class="text-danger" href="#">Delete</a>
+                            <a href="{{ path('article.show', {id: article.id}) }}">Read</a>
+                            <a class="text-danger" href="{{ path('article.delete', {id: article.id}) }} ">Delete</a>
                         </td>
                     </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
-                <a href="#" class="btn btn-primary">Add new</a>
+                <a href="{{ path('article.create') }}" class="btn btn-primary">Add new</a>
             </div>
         </div>
     </div>

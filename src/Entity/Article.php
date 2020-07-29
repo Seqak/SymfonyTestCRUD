@@ -83,9 +83,11 @@ class Article
         return $this->insertdate;
     }
 
-    public function setInsertdate(string $insertdate): self
+    public function setInsertdate(): self
     {
-        $this->insertdate = $insertdate;
+        $currentDate = new \DateTime("now");
+        $currentDate = $currentDate->format('Y-m-d');
+        $this->insertdate = $currentDate;
 
         return $this;
     }
