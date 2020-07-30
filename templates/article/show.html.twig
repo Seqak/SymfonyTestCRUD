@@ -7,7 +7,7 @@
             <div class="col-md-6">
 
                 <h2>{{ article.title }}</h2>
-                <span class="text-info">{{ article.author }}</span>
+                <span class="text-info">{{ article.author }}, <small>{{ article.insertdate }}</small></span>
                 <p>{{ article.content }}</p>
 
                 <a href="{{ path('article.index') }}" class="btn btn-primary">Back</a>

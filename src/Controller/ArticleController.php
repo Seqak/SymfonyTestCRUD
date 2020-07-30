@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,22 +30,31 @@ class ArticleController extends AbstractController
     /**
      * @Route("/create", name="create")
      */
-    public function create()
+    public function create(Request $request)
     {
         $article = new Article();
 
-        $article->setTitle("Some about Lorem");
-        $article->setContent("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
-        $article->setAuthor("Kacper");
-        $article->setInsertdate();
+        $form = $this->createForm(ArticleType::class, $article);
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($article);
-        $em->flush();
+        $form->handleRequest($request);
 
-        $this->addFlash('success', 'Article added.');
+        if ($form->isSubmitted()){
 
-        return $this->redirect($this->generateUrl('article.index'));
+            $article->setAuthor('Kacper');
+            $article->setInsertdate();
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($article);
+            $em->flush();
+
+            $this->addFlash('success', 'Article was added.');
+            return $this->redirect($this->generateUrl('article.index'));
+
+        }
+
+        return $this->render('article/create.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     //Read
