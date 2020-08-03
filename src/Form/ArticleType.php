@@ -15,15 +15,19 @@ class ArticleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class)
+            ->add('title', TextType::class, [
+                'empty_data' => ''
+            ])
             ->add('content', TextareaType::class, [
                 'attr' => [
                     'rows' => '9'
-                ]
+                ],
+                'empty_data' => '',
+                'required' => false
             ])
             ->add('save', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-primary'
+                    'class' => 'btn btn-primary float-left mr-1'
                 ]
             ])
         ;

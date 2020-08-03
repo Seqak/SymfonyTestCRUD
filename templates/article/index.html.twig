@@ -35,6 +35,7 @@
                         <td> {{ article.insertdate }} </td>
                         <td>
                             <a href="{{ path('article.show', {id: article.id}) }}">Read</a>
+                            <a class="text-success" href="{{ path('article.update', {id: article.id}) }}">Edit</a>
                             <a class="text-danger" href="{{ path('article.delete', {id: article.id}) }} ">Delete</a>
                         </td>
                     </tr>

@@ -75,7 +75,9 @@ class ArticleController extends AbstractController
      */
     public function show(ArticleRepository $articleRepository, $id)
     {
-        $article = $articleRepository->findOneBy(array('id' => $id));
+        $article = $articleRepository->findOneBy(array(
+            'id' => $id
+        ));
 //        $articleTitle = $article->getTitle();
 
         return $this->render('article/show.html.twig', [
@@ -84,6 +86,48 @@ class ArticleController extends AbstractController
     }
 
     //Update
+
+    /**
+     * @Route("/update/{id}", name="update")
+     */
+    public function update(Request $request, ArticleRepository $articleRepository, ValidatorInterface $validator, $id)
+    {
+        $article = $articleRepository->findOneBy(array(
+            'id' => $id
+        ));
+
+        $form = $this->createForm(ArticleType::class, $article);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()){
+
+            $errors = $validator->validate($article);
+
+            if (count($errors) > 0){
+
+                $this->addFlash('warning','The data is invalid. Enter correct data.');
+
+                return $this->redirect($this->generateUrl('article.update', ['id' => $id]));
+            }
+            else{
+
+                $article->setAuthor('Kacper');
+                $article->setInsertdate();
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($article);
+                $em->flush();
+
+                $this->addFlash('success', 'Article was updated.');
+                return $this->redirect($this->generateUrl('article.index'));
+
+            }
+        }
+
+        return $this->render("article/update.html.twig", [
+            'form' => $form->createView()
+        ]);
+    }
 
     /**
      * @Route("/delete/{id}", name="delete")

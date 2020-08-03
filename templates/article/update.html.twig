@@ -11,8 +11,9 @@
                     </div>
                 {% endfor %}
 
-                <h3>Create new article</h3>
-                {{ form(form) }}
+                {{ form_start(form, {'attr' : {'id': 'test-class'}}) }}
+                    {{ form(form) }}
+                {{ form_end(form) }}
 
                 <a class="btn btn-dark" href="{{ path('article.index') }}">Back</a>
             </div>
