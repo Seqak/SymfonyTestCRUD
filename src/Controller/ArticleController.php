@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @Route("/article", name="article.")
@@ -30,26 +31,36 @@ class ArticleController extends AbstractController
     /**
      * @Route("/create", name="create")
      */
-    public function create(Request $request)
+    public function create(Request $request, ValidatorInterface $validator)
     {
         $article = new Article();
 
         $form = $this->createForm(ArticleType::class, $article);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted()){
 
-            $article->setAuthor('Kacper');
-            $article->setInsertdate();
+            $errors = $validator->validate($article);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($article);
-            $em->flush();
+            if (count($errors) > 0){
 
-            $this->addFlash('success', 'Article was added.');
-            return $this->redirect($this->generateUrl('article.index'));
+                $this->addFlash('warning','The data is invalid. Enter correct data.');
 
+                return $this->redirect($this->generateUrl('article.create'));
+            }
+            else{
+
+                $article->setAuthor('Kacper');
+                $article->setInsertdate();
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($article);
+                $em->flush();
+
+                $this->addFlash('success', 'Article was added.');
+                return $this->redirect($this->generateUrl('article.index'));
+
+            }
         }
 
         return $this->render('article/create.html.twig', [

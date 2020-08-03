@@ -5,6 +5,12 @@
     <div class="container-fluid">
         <div class="col-md-12 row">
             <div class="col-md-6">
+                {% for message in app.flashes('warning') %}
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
                 <h3>Create new article</h3>
                 {{ form(form) }}
 
