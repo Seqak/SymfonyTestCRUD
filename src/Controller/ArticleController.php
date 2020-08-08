@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Services\FileService;
 
 /**
  * @Route("/article", name="article.")
@@ -31,12 +32,13 @@ class ArticleController extends AbstractController
     /**
      * @Route("/create", name="create")
      */
-    public function create(Request $request, ValidatorInterface $validator)
+    public function create(Request $request, ValidatorInterface $validator, FileService $fileService)
     {
         $article = new Article();
 
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
+        $image = '3faa89e6e7888dcaf7ef766357fc021d.png';
 
         if ($form->isSubmitted()){
 
@@ -50,21 +52,34 @@ class ArticleController extends AbstractController
             }
             else{
 
-                $article->setAuthor('Kacper');
-                $article->setInsertdate();
+                $file = $request->files->get('article')["my_file"];
+                $fileService->uploadFile($file);
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($article);
-                $em->flush();
+//                $uploads_directory = $this->getParameter('uploads_directory');
+//                $filename = md5(uniqid()) . '.' . $file->guessExtension();
+//                $file->move(
+//                    $uploads_directory,
+//                    $filename
+//                );
 
-                $this->addFlash('success', 'Article was added.');
-                return $this->redirect($this->generateUrl('article.index'));
+
+
+//                $article->setAuthor('Kacper');
+//                $article->setInsertdate();
+//
+//                $em = $this->getDoctrine()->getManager();
+//                $em->persist($article);
+//                $em->flush();
+//
+//                $this->addFlash('success', 'Article was added.');
+//                return $this->redirect($this->generateUrl('article.index'));
 
             }
         }
 
         return $this->render('article/create.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'image' => $image
         ]);
     }
 

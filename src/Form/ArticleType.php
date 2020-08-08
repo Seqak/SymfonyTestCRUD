@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Article;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -24,6 +25,10 @@ class ArticleType extends AbstractType
                 ],
                 'empty_data' => '',
                 'required' => false
+            ])
+            ->add("my_file", FileType::class, [
+                'mapped' => false,
+                'label' => "Pleas upload some file"
             ])
             ->add('save', SubmitType::class, [
                 'attr' => [
