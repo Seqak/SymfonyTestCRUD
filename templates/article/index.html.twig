@@ -35,14 +35,18 @@
                         <td> {{ article.insertdate }} </td>
                         <td>
                             <a href="{{ path('article.show', {id: article.id}) }}">Read</a>
-                            <a class="text-success" href="{{ path('article.update', {id: article.id}) }}">Edit</a>
-                            <a class="text-danger" href="{{ path('article.delete', {id: article.id}) }} ">Delete</a>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a class="text-success" href="{{ path('article.update', {id: article.id}) }}">Edit</a>
+                                <a class="text-danger" href="{{ path('article.delete', {id: article.id}) }} ">Delete</a>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
                     </tbody>
                 </table>
-                <a href="{{ path('article.create') }}" class="btn btn-primary">Add new</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('article.create') }}" class="btn btn-primary">Add new</a>
+                {% endif %}
             </div>
         </div>
     </div>
